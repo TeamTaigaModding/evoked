@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smithing",
+  "base": {
+    "item": "evoked:totem_husk"
+  },
+  "addition": {
+    "item": "evoked:rune_of_life"
+  },
+  "result": {
+    "item": "minecraft:totem_of_undying"
+  }
+}
