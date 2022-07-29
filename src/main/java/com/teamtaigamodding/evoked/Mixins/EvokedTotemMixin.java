@@ -1,25 +1,22 @@
 package com.teamtaigamodding.evoked.Mixins;
 
 import com.teamtaigamodding.evoked.EvokedItems;
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.stats.Stats;
+import com.teamtaigamodding.evoked.scheduler.EvokedTickHandler;
+import com.teamtaigamodding.evoked.scheduler.GiveTotemTask;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import net.minecraft.world.entity.LivingEntity;
-
-import com.teamtaigamodding.evoked.EvokedItems;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.concurrent.TimeUnit;
 
 @Mixin(LivingEntity.class)
 
@@ -33,15 +30,7 @@ public abstract class EvokedTotemMixin extends Entity {
 
     @Inject(at = @At("TAIL"), method = "Lnet/minecraft/world/entity/LivingEntity;checkTotemDeathProtection(Lnet/minecraft/world/damagesource/DamageSource;)Z", cancellable = true)
     private void EvokedTotemMixin(DamageSource DamageSource, CallbackInfoReturnable<Boolean> cir) {
-        if (((LivingEntity) (Object) this).getHealth() == 1.0F) {
-            for (InteractionHand IH : InteractionHand.values()) {
-                ItemStack TotemHusk = new ItemStack(EvokedItems.TOTEM_HUSK.get());
-                if ( ((LivingEntity) (Object) this).getItemInHand(IH).isEmpty()) {
-
-                    ((LivingEntity) (Object) this).setItemInHand(IH, TotemHusk);
-                    break;
-                }
-            }
-        }
+        LivingEntity LE = (LivingEntity) (Object) this;
+        if (LE.getHealth() == 1.0f) EvokedTickHandler.scheduleAsyncTask(new GiveTotemTask( (LivingEntity) (Object) this), 2150, TimeUnit.MILLISECONDS);
     }
 }

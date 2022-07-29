@@ -1,0 +1,12 @@
+{
+	"required": true,
+	"package": "com.teamtaigamodding.evoked.Mixins",
+	"compatibilityLevel": "JAVA_17",
+	"refmap": "evoked.refmap.json",
+	"mixins": [
+		"EvokedTotemMixin"
+	],
+	"client": [
+	],
+	"minVersion": "0.8"
+}
