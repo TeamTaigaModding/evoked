@@ -16,22 +16,9 @@ public class EvokedTickHandler {
     public static HashMultimap<Integer, Runnable> TICK_HANDLER = HashMultimap.<Integer, Runnable>create();
 
     public static void scheduleAsyncTask(Runnable run, int time, TimeUnit unit) {
-        if (scheduler == null)
-            serverStartupTasks();
+        if (scheduler == null) scheduler = Executors.newScheduledThreadPool(1);
 
         scheduler.schedule(run, time, unit);
-    }
-
-    public static void serverStartupTasks() {
-        if (scheduler != null) {
-            for (Runnable task : REQUIRED_TASKS) {
-                task.run();
-            }
-
-            scheduler.shutdownNow();
-        }
-
-        scheduler = Executors.newScheduledThreadPool(1);
     }
 
     public static void handleSyncScheduledTasks(int tick) {

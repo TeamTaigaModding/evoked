@@ -1,14 +1,10 @@
 package com.teamtaigamodding.evoked.Mixins;
 
-import com.teamtaigamodding.evoked.EvokedItems;
 import com.teamtaigamodding.evoked.scheduler.EvokedTickHandler;
 import com.teamtaigamodding.evoked.scheduler.GiveTotemTask;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,6 +27,6 @@ public abstract class EvokedTotemMixin extends Entity {
     @Inject(at = @At("TAIL"), method = "Lnet/minecraft/world/entity/LivingEntity;checkTotemDeathProtection(Lnet/minecraft/world/damagesource/DamageSource;)Z", cancellable = true)
     private void EvokedTotemMixin(DamageSource DamageSource, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity LE = (LivingEntity) (Object) this;
-        if (LE.getHealth() == 1.0f) EvokedTickHandler.scheduleAsyncTask(new GiveTotemTask( (LivingEntity) (Object) this), 2150, TimeUnit.MILLISECONDS);
+        if (LE.getHealth() == 1.0f) EvokedTickHandler.scheduleAsyncTask(new GiveTotemTask(LE), 2150, TimeUnit.MILLISECONDS);
     }
 }
