@@ -41,6 +41,10 @@ minecraft {
 
             property 'forge.enabledGameTestNamespaces', 'evoked'
 
+            property "mixin.env.remapRefMap", "true"
+            property "mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg"
+
+
             mods {
                 evoked {
                     source sourceSets.main
@@ -52,6 +56,9 @@ minecraft {
             workingDirectory project.file('run')
 
             property 'forge.logging.markers', 'REGISTRIES'
+            property "mixin.env.remapRefMap", "true"
+            property "mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg"
+
 
             property 'forge.logging.console.level', 'debug'
             property 'forge.enabledGameTestNamespaces', 'evoked'
@@ -67,6 +74,9 @@ minecraft {
             workingDirectory project.file('run')
 
             property 'forge.logging.markers', 'REGISTRIES'
+            property "mixin.env.remapRefMap", "true"
+            property "mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg"
+
 
             property 'forge.logging.console.level', 'debug'
 
@@ -83,6 +93,9 @@ minecraft {
             workingDirectory project.file('run')
 
             property 'forge.logging.markers', 'REGISTRIES'
+            property "mixin.env.remapRefMap", "true"
+            property "mixin.env.refMapRemappingFile", "${projectDir}/build/createSrgToMcp/output.srg"
+
 
             property 'forge.logging.console.level', 'debug'
 
@@ -100,13 +113,13 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-
-
+    maven { url "https://maven.jaackson.me" }
 }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.18.2-40.1.51'
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    implementation fg.deobf("com.teamabnormals:blueprint:1.18.2-5.4.1")
 }
 
 mixin {
