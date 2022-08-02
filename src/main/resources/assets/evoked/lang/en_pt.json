@@ -1,4 +1,7 @@
 {
   "item.evoked.rune_of_life": "Gem o' youth",
-  "item.evoked.totem_husk": "Fractured jewel"
+  "item.evoked.totem_husk": "Fractured jewel",
+
+  "evoked.advancements.story.charge_totem_husk.title": "Davy Jone's Jewel",
+  "evoked.advancements.story.charge_totem_husk.description": "Usin' tha evil wizards gem to charge a fractured jewel ta form wha even gold cant buy"
 }

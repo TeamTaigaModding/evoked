@@ -1,0 +1,37 @@
+{
+  "parent": "minecraft:adventure/kill_a_mob",
+  "display": {
+    "icon": {
+      "item": "minecraft:totem_of_undying"
+    },
+    "title": {
+      "translate": "evoked.advancements.story.charge_totem_husk.title"
+    },
+    "description": {
+      "translate": "evoked.advancements.story.charge_totem_husk.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "hi_dm_me_ur_credit_card_plz_i_need_money": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:totem_of_undying"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "hi_dm_me_ur_credit_card_plz_i_need_money"
+    ]
+  ]
+}

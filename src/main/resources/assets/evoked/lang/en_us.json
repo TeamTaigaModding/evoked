@@ -1,4 +1,7 @@
 {
   "item.evoked.rune_of_life": "Rune of Life",
-  "item.evoked.totem_husk": "Totem Husk"
+  "item.evoked.totem_husk": "Totem Husk",
+
+  "evoked.advancements.story.charge_totem_husk.title": "The Gift of Life",
+  "evoked.advancements.story.charge_totem_husk.description": "Use a Life Rune from an Evoker to charge a Totem Husk from a Woodland Mansion to form the ultimate instrument of immortality"
 }

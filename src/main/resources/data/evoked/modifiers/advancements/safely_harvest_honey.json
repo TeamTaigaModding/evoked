@@ -1,0 +1,10 @@
+{
+  "selector": "minecraft:adventure/totem_of_undying",
+  "priority": "normal",
+  "modifiers": [
+    {
+      "type": "parent",
+      "config": "evoked:adventure/charge_totem_husk"
+    }
+  ]
+}
