@@ -6,7 +6,7 @@ license="All rights reserved"
     version="${file.jarVersion}"
     displayName="Evoked"
     logoFile="evoked.png"
-    credits="DoltHHaven"
+    credits="DoltHHaven, Carmen, Sqzrth for the logo"
     authors="Team Taiga"
     description='''
 A mod that spices up Totems by making them more consistent and the process of acquring them more fun
