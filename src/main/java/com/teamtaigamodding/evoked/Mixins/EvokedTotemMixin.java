@@ -5,6 +5,7 @@ import com.teamtaigamodding.evoked.scheduler.GiveTotemTask;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
+import com.teamtaigamodding.evoked.EvokedConfig;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -36,47 +37,47 @@ public abstract class EvokedTotemMixin extends Entity {
     private void CheckTotemDeathProtection(DamageSource DamageSource, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity LE = (LivingEntity) (Object) this;
 
-        if (LE.getHealth() == 1.0f) EvokedTickHandler.scheduleAsyncTask(new GiveTotemTask(LE), 2130, TimeUnit.MILLISECONDS);
+        if (LE.getHealth() == 1.0f && LE.getEffect(MobEffects.ABSORPTION) != null) EvokedTickHandler.scheduleAsyncTask(new GiveTotemTask(LE), 2130, TimeUnit.MILLISECONDS);
     }
 
     @Inject(at = @At("HEAD"), method = "Lnet/minecraft/world/entity/LivingEntity;checkTotemDeathProtection(Lnet/minecraft/world/damagesource/DamageSource;)Z", cancellable = true)
     private void CheckTotemDeathProtectionH(DamageSource DamageSource, CallbackInfoReturnable<Boolean> cir) {
-        LivingEntity LE = (LivingEntity) (Object) this;
-        if (LE.getY() < -64 && DamageSource.equals(DamageSource.OUT_OF_WORLD)) {
-            ItemStack itemstack = null;
-            for (InteractionHand interactionhand : InteractionHand.values()) {
-                ItemStack itemstack1 = LE.getItemInHand(interactionhand);
-                if (itemstack1.is(Items.TOTEM_OF_UNDYING)) {
-                    itemstack = itemstack1.copy();
-                    itemstack1.shrink(1);
+        if (EvokedConfig.Common.COMMON.TotemsWorkInVoid.get()) {
+            LivingEntity LE = (LivingEntity) (Object) this;
+            if (LE.getY() < -64 && DamageSource.equals(DamageSource.OUT_OF_WORLD)) {
+                ItemStack itemstack = null;
+                for (InteractionHand interactionhand : InteractionHand.values()) {
+                    ItemStack itemstack1 = LE.getItemInHand(interactionhand);
+                    if (itemstack1.is(Items.TOTEM_OF_UNDYING)) {
+                        itemstack = itemstack1.copy();
+                        itemstack1.shrink(1);
 
-                    break;
+                        break;
+                    }
                 }
-            }
-            if (itemstack != null) {
-                if (LE instanceof ServerPlayer) {
-                    ServerPlayer serverplayer = (ServerPlayer) LE;
-                    serverplayer.awardStat(Stats.ITEM_USED.get(Items.TOTEM_OF_UNDYING), 1);
-                    CriteriaTriggers.USED_TOTEM.trigger(serverplayer, itemstack);
+                if (itemstack != null) {
+                    if (LE instanceof ServerPlayer) {
+                        ServerPlayer serverplayer = (ServerPlayer) LE;
+                        serverplayer.awardStat(Stats.ITEM_USED.get(Items.TOTEM_OF_UNDYING), 1);
+                        CriteriaTriggers.USED_TOTEM.trigger(serverplayer, itemstack);
+                    }
+                    LE.setHealth(1.0F);
+                    LE.removeAllEffects();
+                    LE.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 300, 0));
+                    LE.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 900, 1));
+                    LE.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 100, 1));
+                    LE.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 800, 0));
+
+                    LE.teleportTo(LE.getX(), 160, LE.getZ());
+                    LE.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 20, 0));
+
+
+                    EvokedTickHandler.scheduleAsyncTask(new GiveTotemTask(LE), 2130, TimeUnit.MILLISECONDS);
+                    LE.level.broadcastEntityEvent(this, (byte) 35);
+                    cir.setReturnValue(true);
                 }
-                LE.setHealth(1.0F);
-                LE.removeAllEffects();
-                LE.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 300, 0));
-                LE.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 900, 1));
-                LE.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 100, 1));
-                LE.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 800, 0));
 
-                LE.teleportTo(LE.getX(), 160, LE.getZ());
-                LE.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 20, 0));
-
-
-
-                EvokedTickHandler.scheduleAsyncTask(new GiveTotemTask(LE), 2130, TimeUnit.MILLISECONDS);
-                LE.level.broadcastEntityEvent(this, (byte)35);
-                cir.setReturnValue(true);
             }
-
         }
-
     }
 }
