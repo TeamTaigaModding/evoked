@@ -36,8 +36,12 @@ public abstract class EvokedTotemMixin extends Entity {
     @Inject(at = @At("TAIL"), method = "Lnet/minecraft/world/entity/LivingEntity;checkTotemDeathProtection(Lnet/minecraft/world/damagesource/DamageSource;)Z", cancellable = true)
     private void CheckTotemDeathProtection(DamageSource DamageSource, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity LE = (LivingEntity) (Object) this;
-
-        if (LE.getHealth() == 1.0f && LE.getEffect(MobEffects.ABSORPTION) != null) EvokedTickHandler.scheduleAsyncTask(new GiveTotemTask(LE), 2130, TimeUnit.MILLISECONDS);
+        boolean isReal = LE.getEffect(MobEffects.ABSORPTION).getAmplifier() == 1
+                && LE.getEffect(MobEffects.DAMAGE_RESISTANCE).getAmplifier() == 1
+                && LE.getEffect(MobEffects.FIRE_RESISTANCE).getAmplifier() == 0
+                && LE.getEffect(MobEffects.ABSORPTION).getDuration() == 100 &&
+                LE.getEffect(MobEffects.FIRE_RESISTANCE).getDuration()  == 800;
+        if (LE.getHealth() == 1.0f && isReal) EvokedTickHandler.scheduleAsyncTask(new GiveTotemTask(LE), 2130, TimeUnit.MILLISECONDS);
     }
 
     @Inject(at = @At("HEAD"), method = "Lnet/minecraft/world/entity/LivingEntity;checkTotemDeathProtection(Lnet/minecraft/world/damagesource/DamageSource;)Z", cancellable = true)
