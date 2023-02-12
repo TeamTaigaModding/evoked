@@ -60,7 +60,6 @@ public abstract class EvokedTotemMixin extends Entity {
                     if (itemstack1.is(Items.TOTEM_OF_UNDYING)) {
                         itemstack = itemstack1.copy();
                         itemstack1.shrink(1);
-
                         break;
                     }
                 }
