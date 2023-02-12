@@ -29,6 +29,7 @@ public class Evoked {
 
 
         EvokedItems.ITEMS.register(modEventBus);
+        EvokedLootModifier.LOOT_MODIFIERS.register(modEventBus);
 
 
         MinecraftForge.EVENT_BUS.register(this);
