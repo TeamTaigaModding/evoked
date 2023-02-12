@@ -35,7 +35,7 @@ public class TotemHuskItem extends Item {
         return false;
     }
 
-     @Override
+    @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         FILLER.fillItem(this.asItem(), group, items);
     }

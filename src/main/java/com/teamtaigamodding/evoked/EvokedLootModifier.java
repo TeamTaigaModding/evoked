@@ -9,5 +9,5 @@ import net.minecraftforge.registries.RegistryObject;
 public class EvokedLootModifier {
     public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> LOOT_MODIFIERS = DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, Evoked.MOD_ID);
 
-    public static final RegistryObject<Codec<? extends IGlobalLootModifier>> ADD_ITEM = LOOT_MODIFIERS.register("add_item", RemoveOneItemModifier.CODEC);
+    public static final RegistryObject<Codec<? extends IGlobalLootModifier>> REMOVE_ITEM = LOOT_MODIFIERS.register("remove_item", RemoveOneItemModifier.CODEC);
 }
