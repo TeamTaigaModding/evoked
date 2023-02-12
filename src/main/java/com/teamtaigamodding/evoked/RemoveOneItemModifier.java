@@ -1,32 +1,35 @@
 package com.teamtaigamodding.evoked;
 
-import com.google.gson.JsonObject;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
+import com.google.common.base.Suppliers;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.function.Supplier;
 
 public class RemoveOneItemModifier extends LootModifier {
-
+    public static final Supplier<Codec<RemoveOneItemModifier>> CODEC = Suppliers.memoize(() ->
+            RecordCodecBuilder.create(inst -> codecStart(inst)
+                    .and(ForgeRegistries.ITEMS.getCodec().fieldOf("item").forGetter((m) -> m.toRemove))
+                    .apply(inst, RemoveOneItemModifier::new)));
     private final Item toRemove;
 
-    protected RemoveOneItemModifier(Item toRemove, LootItemCondition[] conditionsIn) {
+    protected RemoveOneItemModifier(LootItemCondition[] conditionsIn, Item toRemove) {
         super(conditionsIn);
         this.toRemove = toRemove;
     }
 
-    @NotNull
     @Override
-    protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
-        for (int i = 0; i < generatedLoot.size();i++) {
+    protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
+        for (int i = 0; i < generatedLoot.size(); i++) {
             if (generatedLoot.get(i).getItem().equals(toRemove)) {
                 generatedLoot.remove(i);
             }
@@ -34,16 +37,8 @@ public class RemoveOneItemModifier extends LootModifier {
         return generatedLoot;
     }
 
-    public static class Serializer extends GlobalLootModifierSerializer<RemoveOneItemModifier> {
-        @Override
-        public RemoveOneItemModifier read(ResourceLocation location, JsonObject object, LootItemCondition[] ailootcondition) {
-            Item removeItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation((GsonHelper.getAsString(object, "item"))));
-            return new RemoveOneItemModifier(removeItem, ailootcondition);
-        }
-
-        @Override
-        public JsonObject write(RemoveOneItemModifier instance) {
-            return new JsonObject();
-        }
+    @Override
+    public Codec<? extends IGlobalLootModifier> codec() {
+        return CODEC.get();
     }
 }
